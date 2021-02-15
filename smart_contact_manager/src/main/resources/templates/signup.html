@@ -15,11 +15,11 @@
 						<div class="my-card mt-3">
 						
 						<!-- alert message if error/success -->
+			
 						<div th:if="${session.message}"  th:classappend="${session.message.type}" class="alert text-center">
 							<p th:text="${session.message.content}"></p>				
 							<th:block th:text="${#session.removeAttribute('message')}"> </th:block>
 						</div>
-						
 						
 						<div class="container text-center">
 								<img th:src="@{/image/profile-icon.png}" src="" alt="profile" />
@@ -27,7 +27,7 @@
 							
 							<h1 class="text-center">Register here !!</h1>	
 							
-							<form th:action="@{/register/}" method="post" th:object="${user}">
+							<form novalidate="novalidate" th:action="@{/register/}" method="post" th:object="${user}">
 								
 								<!-- name field -->
 								
@@ -37,11 +37,17 @@
 										<input 
 													type="text" 
 													class="form-control"
+													th:classappend="${#fields.hasErrors('name')?'is-invalid': ' ' }"													 
 													 id="name-field"
 													 name="name"
 													th:value="${user.name}" 
-													 placeholder="Enter full name" required />		
+													 placeholder="Enter name" required />		
+													
+													<div th:each="e : ${#fields.errors('name')}" th:text="${e}" class="invalid-feedback" >
+													</div>
 								</div>
+								
+
 
 								<!-- email field -->
 								<div class="form-group">
@@ -51,10 +57,14 @@
 									<input 
 												type="email" 
 												class="form-control"
+												th:classappend="${#fields.hasErrors('email')?'is-invalid': ' ' }"
 												 id="email-field"
 												 name="email"
 												 th:value="${user.email}"
 												 placeholder="email here" required />		
+												<div th:each="e : ${#fields.errors('email')}" th:text="${e}" class="invalid-feedback" >
+												</div>
+
 								</div>
 
 								<!-- password field -->
@@ -66,8 +76,13 @@
 												type="password" 
 												name="password"
 												class="form-control"
+												th:classappend="${#fields.hasErrors('password')?'is-invalid': ' ' }"	
 												 id="password-field"
-												 placeholder="password here" required />		
+												 placeholder="password here" required />
+												
+												<div th:each="e : ${#fields.errors('password')}" th:text="${e}" class="invalid-feedback" >
+												</div>
+												 		
 								</div>
 								
 								<!-- user about fields -->
@@ -75,10 +90,14 @@
 									<textarea  
 													id="about-field" 
 													class="form-control"
+													th:classappend="${#fields.hasErrors('about')?'is-invalid': ' ' }"				
 													name="about"
 													th:text="${user.about}" 			
 													placeholder="Enter something about yourself" 
 													rows="5"></textarea>
+													<div th:each="e : ${#fields.errors('about')}" th:text="${e}" class="invalid-feedback" >
+													</div>
+								
 								</div>
 								
 								<!-- terms and conditions agreement -->

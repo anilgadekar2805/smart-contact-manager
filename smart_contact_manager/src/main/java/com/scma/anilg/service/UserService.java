@@ -1,5 +1,5 @@
 package com.scma.anilg.service;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +13,10 @@ public class UserService {
 	UserRepository userRepository;
 	
 	public User userRegister(User user) {
-		user.setImageUrl("profile.jpg");
-		user.setEnabled(true);
-		user.setRole("ROLE_USER");
+		System.out.println("userService : "+user );
 		return userRepository.save(user);
 	}
 	
 	
 }
+*/
