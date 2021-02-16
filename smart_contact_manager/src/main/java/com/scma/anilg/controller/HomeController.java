@@ -89,10 +89,11 @@ public class HomeController {
 		return "signup";
 	}
 	
-	@GetMapping("/login")
+	@GetMapping("/signin")
 	public String login(Model model) {
 		model.addAttribute("title", "Login : Smart contact Manager");
 		return "login";
 	}
 	
+
 }
