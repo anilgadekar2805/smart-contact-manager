@@ -23,7 +23,7 @@
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 
 
-<title th:text="${title}">Base page</title>
+<title th:text="${title}">User base page</title>
 </head>
 <body>
 	<!-- navbar -->
@@ -44,14 +44,12 @@
 				<ul class="navbar-nav ml-auto text-uppercase">
 
 					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/home/}"  href="#">Home</a></li>
+						aria-current="page" th:href="@{/user/index}"  href="#">Home</a></li>
 
-					<li class="nav-item"><a class="nav-link" href="#">About</a></li>
-
-					<li class="nav-item"><a class="nav-link" href="#" th:href="@{/signin}">Login</a></li>
+					<li class="nav-item"><a class="nav-link" href="#" ><span th:text="${user.name}"></span></a></li>
 					
 					<li class="nav-item"><a class="nav-link " 
-						th:href="@{/signup/}" href="#" >Signup</a></li>
+						th:href="@{/logout}" href="#" >Logout</a></li>
 				</ul>
 
 			</div>
