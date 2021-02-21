@@ -20,15 +20,17 @@ public class Contact {
 	private String work;
 	private String email;
 	private String image;
+	private String phone;
+	
 	@Column(length = 1000)
 	private String description;
-	private String phone;
+	
 	
 	@ManyToOne
 	private User user;
 	
 	public Contact() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public int getcId() {
@@ -102,8 +104,16 @@ public class Contact {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
-	
-	
+
+	/**
+	 * If we remove this comment, we will get StackOverflow error at contact adding time
+	 * */
+	/*
+	@Override
+	public String toString() {
+		return "Contact [cId=" + cId + ", name=" + name + ", secondName=" + secondName + ", work=" + work + ", email="
+				+ email + ", image=" + image + ", description=" + description + ", phone=" + phone + ", user=" + user
+				+ "]";
+	}	
+*/
 }

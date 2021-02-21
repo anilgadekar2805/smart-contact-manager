@@ -1,5 +1,5 @@
 package com.scma.anilg.service;
-/*
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,14 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	public User findUserByEmail(String email) {
+		User resultUser = userRepository.loadUserByUsername(email);
+		return resultUser;
+	}
+	
+	public User addContactInUser(User user) {
+		User result = userRepository.save(user);
+		return result;
+	}
 	
 }
-*/
