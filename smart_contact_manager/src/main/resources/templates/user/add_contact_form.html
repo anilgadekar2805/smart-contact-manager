@@ -8,8 +8,19 @@
 	
 	<section>
 
-			<div class="card ml-3 mr-3">
+			<div class="card ml-3 mr-3 mb-1">
 				<h2 class="card-header text-center"> Add Contact </h2>
+				
+				<!-- alert message for record add successful or failure -->
+				<div th:if="${session.message}"  class="container col-8">
+					
+					<div th:classappend="${'alert-'+session.message.type}" class="alert  text-center">
+						<span th:text="${session.message.content}"></span>
+					</div>
+					<!-- remove alert after completion -->
+					<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+				</div>
+				
 				<div class="card-body">
 						
 						<div class="container-fluid mt-1">
@@ -26,64 +37,119 @@
 											
 												<!-- first-name -->
 												<div class="input-group">
+													
 													<div class="input-group-prepend">
 														<div class="input-group-text">
 															<i class="fa fa-plus"></i>
 														</div>
 													</div>
-													<input type="text" class="form-control" id="firstName" name="name" placeholder="Enter Name here ">
+													
+													<input type="text" class="form-control" 
+													id="firstName" name="name" 
+													placeholder="Enter Name here " 
+													th:value="${contact.name}"
+													th:classappend="${#fields.hasErrors('name')?'is-invalid':' ' }" required>
+													
+													<div th:each="e : ${#fields.errors('name')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
+													
 												</div>
+												
+												
 												
 												<!-- last-name -->
 												<div class="input-group mt-2">
+													
 													<div class="input-group-prepend">
 														<div class="input-group-text">
 															<i class="fas fa-user-alt"></i>
 														</div>
 													</div>
-													<input type="text" class="form-control" id="lastName" name="secondName" placeholder="Enter nickname here ">
+													
+													<input type="text" class="form-control" id="lastName" 
+													name="secondName" placeholder="Enter nickname "
+													th:value="${contact.secondName}"
+													th:classappend="${#fields.hasErrors('secondName')?'is-invalid':' ' }" required>
+													
+													<div th:each="e : ${#fields.errors('secondName')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
+												
 												</div>
 												
 												<!-- email  -->
 												<div class="input-group mt-2">
+													
 													<div class="input-group-prepend">
 														<div class="input-group-text">
 															<i class="fa fa-envelope" aria-hidden="true"></i>
 														</div>
 													</div>
-													<input type="email" class="form-control" id="email" name="email" placeholder="Enter email here">
+													
+													<input type="email" class="form-control" id="email" 
+													name="email" placeholder="email here"
+													th:value="${contact.email}"
+													th:classappend="${#fields.hasErrors('email')?'is-invalid':' ' }" required>
+													
+													<div th:each="e : ${#fields.errors('email')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
+													
 												</div>	
 												
 												<!-- phone -->
 												<div class="input-group mt-2">
+													
 													<div class="input-group-prepend">
 														<div class="input-group-text">
 																<i class="fa fa-phone"></i>
 														</div>
 													</div>
-													<input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone here">
+													
+													<input type="text" class="form-control" id="phone" 
+													name="phone" placeholder="phone number here"
+													th:value="${contact.phone}"
+													th:classappend="${#fields.hasErrors('phone')?'is-invalid':' ' }" required>
+													
+													<div th:each="e : ${#fields.errors('phone')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
 												</div>
 
 												<!-- work -->
 												<div class="input-group mt-2">
+													
 													<div class="input-group-prepend">
 														<div class="input-group-text">
 																<i class="fa fa-briefcase"></i>
 														</div>
 													</div>
-													<input type="text" class="form-control" id="work" name="work" placeholder="Enter work here">
+													
+													<input type="text" class="form-control" id="work" 
+													name="work" placeholder="Enter work "
+													th:value="${contact.work}"
+													th:classappend="${#fields.hasErrors('work')?'is-invalid':' ' }" required>
+													
+													<div th:each="e : ${#fields.errors('work')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
 												</div>
 
 												<!-- form description -->
 												<div class="form-group mt-2">
-													<textarea name="description" id="description" class="form-control" 
+													<textarea name="description" id="mytextarea" class="form-control" 
 																	placeholder="Enter contact description"  
-																	rows="5" ></textarea>
+																	rows="5" 
+																	
+																	th:classappend="${#fields.hasErrors('description')?'is-invalid':' ' }"></textarea>
+																	
+													<div th:each="e : ${#fields.errors('description')}" th:text="${e}" class="invalid-feedback text-center">
+													</div>
+													
 												</div>
 												
 												<!-- image uploading -->
 												<div class="custom-file">
-													<input type="file" class="image"  name="profileImage">
+													
+													<input type="file" class="image"  
+													name="profileImage">
+												 
 												</div>
 												
 												<div class="container text-center">
@@ -99,8 +165,15 @@
 				</div>
 				
 			</div>
-			
-				
+				<!-- TinyMCE rich text editor is added for text-area -->
+				<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+		<script>
+			tinymce.init({
+				selector : '#mytextarea'
+			});
+		</script>
+
 	</section>
 </body>
 </html>

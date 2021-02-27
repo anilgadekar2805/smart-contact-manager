@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="CONTACT")
@@ -15,14 +16,29 @@ public class Contact {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int cId;
+	
+	@NotBlank(message = "Name is mandatory")
 	private String name;
+	
+	@NotBlank(message="Nickname not be blank")
 	private String secondName;
+	
+	@NotBlank(message="Work field not be blank")
 	private String work;
+	
+	@NotBlank(message="Email is mandatory ")
 	private String email;
+	
+	@NotBlank(message="Please select one image")
 	private String image;
+	
+	@NotBlank(message="Phone number is mandatory")
+	//@Pattern(regexp="((0/91)?[7-9][0-9]{9})", message = "Enter valid mobile number" )
 	private String phone;
 	
-	@Column(length = 1000)
+	@NotBlank(message = "Description must not be blank")
+	@Column(length = 5000)
+	//@Size(min = 3, message = "description must be min 3 letters")
 	private String description;
 	
 	

@@ -33,7 +33,6 @@ public class User {
 	private String email;
 	
 	@Size(min = 6, message = "password must be minimum 6 character")
-//	@Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
 	private String password;
 	
 	private String imageUrl;
@@ -44,6 +43,7 @@ public class User {
 	private String about;
 	
 	private String role;
+	
 	private boolean enabled;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")

@@ -22,7 +22,7 @@ public class UserService {
 		return resultUser;
 	}
 	
-	public User addContactInUser(User user) {
+	public User addContactInUser(User user ) {
 		User result = userRepository.save(user);
 		return result;
 	}
