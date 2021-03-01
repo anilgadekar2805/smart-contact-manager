@@ -13,11 +13,15 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -145,5 +149,35 @@ public class UserController {
 		}
 
 	}
+	
+	@GetMapping("/show-contacts/{page}")
+	public String showContacts(@PathVariable("page") Integer page,  Model model, Principal principal) {
+		
+		/** first get current log in user details*/
+		String currentUser = principal.getName();
+		User currentUserDetails = this.userService.findUserByEmail(currentUser);
+		
+		/** First we will get Pageable objects to store current page index and number of records to show end user 
+		 * 	
+		 * - Current page index is - 0, --> page
+		 * - Number of contacts per page = 6 ---> 
+		 * */
+		Pageable pageable = PageRequest.of(page, 2);	
+		
+		/** getting list of contacts from user */
+		Page<Contact> contacts = this.userService.getContactsList(currentUserDetails.getId(), pageable);	
+		System.out.println(contacts.getTotalPages());
+		
+		model.addAttribute("titile", "Show contacts - Smart contact Manager");
+		model.addAttribute("contacts", contacts);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", contacts.getTotalPages());
+		
+		
+		
+		return "user/show_contacts";
+		
+	}
+	
 
 }

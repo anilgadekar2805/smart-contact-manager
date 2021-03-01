@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="user/user_base::layout(~{::section})">
+<head>
+<meta charset="UTF-8" />
+<title>Show contacts</title>
+</head>
+<body>
+	<section>
+
+		<div class="card text-center mr-3 ml-3">
+			<div class="card-body">
+				<h2 class="card-title">Your Contacts</h2>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">#ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Email</th>
+							<th scope="col">Phone</th>
+							<th scope="col">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+				
+						<tr th:each="e : ${contacts}">
+							<th th:text="${e.cId}" scope="row">1</th>
+							<td th:text="${e.name}">Loading..</td>
+							<td th:text="${e.email}">Loading..</td>
+							<td th:text="${e.phone}">Loading..</td>
+							<td>
+								<button class="btn btn-danger btn-sm" mouseover="delete"><i class="far fa-trash-alt"></i></button>
+								<button class="btn btn-info btn-sm" mouseover="update"><i class="fas fa-user-edit"></i></button>
+							</td>
+							<td > </td>
+						</tr>
+				
+					</tbody>
+				</table>
+				
+					<!-- contacts pagination  -->
+					<div class="container text-center">
+							<nav aria-label="Page navigation example">
+								  <ul class="pagination">
+								  
+								    <li class="page-item" th:if="${currentPage != 0}"><a class="page-link" href="#" th:href="@{'/user/show-contacts/'+${currentPage-1}}">Previous</a></li>
+								  
+								    <li class="page-item" th:each="e : ${#numbers.sequence(1, totalPages) }" th:classappend="${currentPage ==e-1 ?'active': ' '} ">
+								    		<a class="page-link" href="#" th:href="@{'/user/show-contacts/'+${e-1}}">
+								    			<span th:text="${e}"></span>
+								    		</a>
+								    </li>
+								  
+								    <li class="page-item" th:if="${currentPage+1 != totalPages}"><a class="page-link" href="#" th:href="@{'/user/show-contacts/'+${currentPage+1}}">Next</a></li>
+								  
+								  </ul>
+							</nav>
+					</div>
+					
+			</div>
+		</div>
+
+	</section>
+</body>
+</html>
