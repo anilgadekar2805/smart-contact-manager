@@ -289,3 +289,11 @@ a {
 	font-size: 36px;
 	cursor : pointer;
 }
+
+.show_contact_img{
+ width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: blue;
+}

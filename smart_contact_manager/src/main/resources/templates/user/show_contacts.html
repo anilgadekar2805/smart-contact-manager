@@ -8,9 +8,17 @@
 <body>
 	<section>
 
-		<div class="card text-center mr-3 ml-3">
+		<div class="container text-center" th:if="${message}">
+			<div class="card alert alert-warning">
+				<div class="card-body">
+					alert ...!! <span th:text="${message.content}"></span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="card  mr-3 ml-3">
 			<div class="card-body">
-				<h2 class="card-title">Your Contacts</h2>
+				<h2 class="card-title text-center">Your Contacts</h2>
 				<table class="table">
 					<thead>
 						<tr>
@@ -24,17 +32,26 @@
 					<tbody>
 				
 						<tr th:each="e : ${contacts}">
+							
 							<th th:text="${e.cId}" scope="row">1</th>
-							<td th:text="${e.name}">Loading..</td>
-							<td th:text="${e.email}">Loading..</td>
+							
+							<td >
+								<img class="show_contact_img" src="#" th:src="@{'/image/'+${e.image}}"  alt="" />
+								<span th:text="${e.name}"></span>
+							</td>
+							
+							<td >
+								<a href="#" th:href="@{'/user/'+${e.cId}+'/contact'}"> <span th:text="${e.email}"></span> </a>
+							</td>
+							
 							<td th:text="${e.phone}">Loading..</td>
 							<td>
-								<button class="btn btn-danger btn-sm" mouseover="delete"><i class="far fa-trash-alt"></i></button>
-								<button class="btn btn-info btn-sm" mouseover="update"><i class="fas fa-user-edit"></i></button>
+								<a href="#" th:onclick="|deleteContact(${e.cId})|" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+								<a href="#" th:href="@{'/user/update-contact/'+${e.cId}}" class="btn btn-info btn-sm" ><i class="fas fa-user-edit"></i></a>
 							</td>
 							<td > </td>
-						</tr>
 				
+						</tr>
 					</tbody>
 				</table>
 				

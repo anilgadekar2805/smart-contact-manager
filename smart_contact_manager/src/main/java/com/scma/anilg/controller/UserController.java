@@ -87,6 +87,11 @@ public class UserController {
 	public String processAddContact(@Valid @ModelAttribute Contact contact, BindingResult result ,@RequestParam("profileImage") MultipartFile mpFile,Principal principal, Model model, HttpSession session) {
 
 		Path destPath = null;
+		String originalFilename = null;
+		
+		 /** making image name unique*/
+		String currDateTime= (LocalDateTime.now()+"").replace(":", "-");
+		
 		/**
 		 * Here we added contact to respective user list to get list of contact using method
 		 * First we retrieve current user
@@ -94,20 +99,20 @@ public class UserController {
 		 * next add this contact info retrieved from form data into users contact List
 		 * send this updated contact form data to user contact-list
 		 * */
+		
 		try {
 		/**
 		 * Setting explicitly retrieving image data using @RequestParam, first save image into /resource/static/image folder then  
 		 * save this image unique name into database as a Url string 
 		 * */
+			
 			if(mpFile.isEmpty()) {
 				System.out.println("file is empty");
-				throw new Exception("Image file must not selected..!!");
+			//	throw new Exception("Image file must not selected..!!");
+				originalFilename = "contact_profile.png";
 			}else {
-			
-				 /** making image name unique*/
-				String currDateTime= (LocalDateTime.now()+"").replace(":", "-");
-				String originalFilename = currDateTime+"@"+mpFile.getOriginalFilename();
-				
+				originalFilename = currDateTime+"@"+mpFile.getOriginalFilename();
+			}	
 				/** retrieve current class-path resource folder relative path */
 				 File savedFile = new ClassPathResource("/static/image").getFile();
 			 
@@ -115,7 +120,7 @@ public class UserController {
 				 System.out.println("Image path :"+destPath);
 				 
 				contact.setImage(originalFilename);
-			}
+			
 			/** first complete contact form setting all attributes details */
 			contact.setUser(currentLogInUserDetails);
 			
@@ -134,14 +139,14 @@ public class UserController {
 		
 		/** success message alert */
 		session.setAttribute("message", new Message("Contact saved successfully.....!!", "success"));
-		
+		model.addAttribute("contact", new Contact());
 		return "user/add_contact_form";
 		
 		}catch(Exception e) {
 			
 			System.out.println("Error : "+e);
 			e.printStackTrace();
-			model.addAttribute("contact", new Contact());
+			model.addAttribute("contact", contact);
 
 			/** failure message alert */
 			session.setAttribute("message", new Message("Something goes wrong, please try again.....!!", "danger"));
@@ -162,7 +167,7 @@ public class UserController {
 		 * - Current page index is - 0, --> page
 		 * - Number of contacts per page = 6 ---> 
 		 * */
-		Pageable pageable = PageRequest.of(page, 2);	
+		Pageable pageable = PageRequest.of(page, 5);	
 		
 		/** getting list of contacts from user */
 		Page<Contact> contacts = this.userService.getContactsList(currentUserDetails.getId(), pageable);	
@@ -179,5 +184,127 @@ public class UserController {
 		
 	}
 	
+	/** Show respective contact details */
+	@SuppressWarnings("unlikely-arg-type")
+	@GetMapping("/{cId}/contact")
+	public String showContact(@PathVariable("cId") int cId, Principal principal, Model model ) {
+		System.out.println("CID : "+cId);
+		
+		String currentUser = principal.getName();
+		model.addAttribute("title", "Contact details : Smart contact Manager");
+		
+		/** Retrieving user contact details */
+		Contact contactDetail = this.userService.getContactDetail(cId);
+		
+		/** checking if url miss-leading happen then check both current login-user and contact user name is same */
+		if(! currentUser.equals(contactDetail.getUser().getEmail())) 
+			model.addAttribute("message", new Message("You are not an authorized user for this contact", "denger"));
+		else
+			model.addAttribute("contact", contactDetail);
+		
+		return "user/show_user_contact_details";
+	}
+	
+	/** deleting contact from given user lists */
+	@GetMapping("/delete-contact/{cId}")
+	public String deleteContact(@PathVariable("cId") Integer cId, Principal principal, Model model ) {
+		
+		/** first take current login user */
+		String name = principal.getName();
+		User currentUser = this.userService.findUserByEmail(name);
+		
+		/** take contact details by using its ID */
+		Contact resultContact = this.userService.getContactById(cId);
+		
+		/** compare both userID for avoiding url miss-leading purpose  */
+		if(currentUser.getId() == resultContact.getUser().getId()) {
+			this.userService.deleteContact(resultContact);
+			
+			/**delete image from our folder also*/
+			// CODE HERE
+			
+		}else {
+			model.addAttribute("message", new Message("You are not an authorized user for this contact", "denger"));
+		}
+		return "redirect:/user/show-contacts/0";
+	}
+	
+	/** Open Update form handler */
+	@GetMapping("/update-contact/{cId}")
+	public String updateContact(@PathVariable("cId") Integer cId, Model model ) {
+		Contact contact = this.userService.getContactById(cId);
+		
+		model.addAttribute("title", "Update contact - Smart Contact Manager");
+		model.addAttribute("subTitle", "Update your Contact");
+		model.addAttribute("contact", contact);
+		
+		return "user/update_contact";
+	}
 
+	
+	/** Process the update contact form  */
+	@PostMapping("/process-update-contact")
+	public String processUpdateContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file, Model model, Principal principal, HttpSession session) {
+		
+		 /** old contact details */
+		 Contact oldContact = this.userService.getContactById(contact.getcId());
+		
+		try {
+		
+		/** we need current user details to set inside contact entity fields */
+		 User currentUser = this.userService.findUserByEmail(principal.getName());
+				 
+		 /** now set this user into passed contact list*/
+		 contact.setUser(currentUser);
+		
+		 /** multi-part file writer */
+		 File saveFile = new ClassPathResource("/static/image").getFile();
+		 
+		 /** creating unique file-name for each image */
+			String uniqueImageName = (LocalDateTime.now()+"").replace(":", "-")+"@"+file.getOriginalFilename();
+		 
+		/** If file is not empty */
+		if(!file.isEmpty()) {
+			
+			/** means user send updated photo*/
+			
+			// first delete previous photo from DB and from saved folder
+			if(oldContact.getImage() !=null) {
+				File deleteFile = new File(saveFile, oldContact.getImage());
+				deleteFile.delete();
+			}
+			
+			// Update new image into our folder location
+			Path path = Paths.get(saveFile+File.separator+uniqueImageName);
+			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			/** now copied file name must be save with same name inside DATABASE */
+			contact.setImage(uniqueImageName);
+			
+		}else {
+			
+			
+			/** mean user not update photo, then set it's previous/old photo*/
+			if(oldContact.getImage() !=null)
+				contact.setImage(oldContact.getImage());
+			else
+				contact.setImage("contact_profile.png");
+			
+		}
+			
+		
+			/** here contact is saved if exist then update otherwise it saved as new contact */
+			Contact updatedContact = this.userService.updateContactInUser(contact);
+			session.setAttribute("message", new Message("Contact successfully updated", "success"));
+		} catch (Exception e) {
+			session.setAttribute("message", new Message("Contact updation failed ", "danger"));
+			e.printStackTrace();
+			model.addAttribute("contact", oldContact);
+			return "redirect:/user/update-contact/"+contact.getcId();
+		}
+		
+		
+		System.out.println("contact name : "+contact.getName());
+		System.out.println("contact ID : "+contact.getcId());
+		return "redirect:/user/"+contact.getcId()+"/contact";
+	}
 }

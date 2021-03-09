@@ -1,0 +1,19 @@
+									******************** Smart Contact Manager Application ********************
+									------------------------------------------------------------------------------------------------------
+
+
+									Different website and tools preffer and used in this project List
+									
+									1. TinyMCE  - it used for smart description box for writing text with different style for our website
+											website : 	https://www.tiny.cloud/
+														https://www.tiny.cloud/docs/demo/
+
+
+									2. sweetalert : it is website to give us different differt alert popup to use our application
+											website :  https://sweetalert.js.org/guides/
+
+
+									3. pexels.com : providing free HD images
+											website : https://www.pexels.com/
+
+									

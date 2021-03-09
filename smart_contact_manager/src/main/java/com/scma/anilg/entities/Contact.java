@@ -29,7 +29,7 @@ public class Contact {
 	@NotBlank(message="Email is mandatory ")
 	private String email;
 	
-	@NotBlank(message="Please select one image")
+	//@NotBlank(message="Please select one image")
 	private String image;
 	
 	@NotBlank(message="Phone number is mandatory")
