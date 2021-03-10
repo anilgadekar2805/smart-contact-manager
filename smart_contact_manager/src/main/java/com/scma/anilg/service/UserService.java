@@ -1,8 +1,12 @@
 package com.scma.anilg.service;
 
+import java.io.File;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import com.scma.anilg.entities.Contact;
 import com.scma.anilg.entities.User;
 
 @Service
+@Transactional
 public class UserService {
 	
 	@Autowired
@@ -56,14 +61,28 @@ public class UserService {
 	}
 	
 	/** delete contact by using ID */
-	public void deleteContact(Contact contact) {
+	
+	public void deleteContact(User user, Contact contact) {
 		
+		try {
+				
 		/** It is not deleted directly because its is mapped with user */
-		contact.setUser(null);
-		this.contacRepository.delete(contact);
+		user.getContacts().remove(contact);
+			
+		//contact.setUser(null);
+		//this.contacRepository.delete(contact);
 		
 		// Now we must delete photo from folder
-		// CODE
+		 File saveFile = new ClassPathResource("/static/image").getFile();
+		 
+		File deleteFile = new File(saveFile,contact.getImage());
+		deleteFile.delete();
+		System.out.println(contact.getcId()+"ID Contact deleted successfully ");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
 	}
 	
 	public Contact updateContactInUser(Contact contact) {

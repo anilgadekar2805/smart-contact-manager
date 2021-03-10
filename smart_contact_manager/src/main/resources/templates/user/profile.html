@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="user/user_base::layout(~{::section})">
+<head>
+<meta charset="ISO-8859-1">
+<title>User Profile</title>
+</head>
+<body>
+	
+	<section style="background: #112c38;">
+			<div class="container">
+					
+					<div class="card m-4 text-center">
+						
+						<div class="card-header">
+							<img style="height:150px; width:150px"  src="" class="show_contact_img" th:src="@{'/image/'+${user.imageUrl}}" alt="" />
+							<h2 class="text-secondary font-italic mt-3" th:text="${user.name}"></h2>
+						</div>
+						
+						<div class="card-body">
+							
+								<table class="table">
+									<thead>
+										    <tr>
+										      <th scope="col">#USER-ID</th>
+										      <th scope="col"><span th:text="${user.id}"></span></th>
+										    </tr>
+									</thead>
+								
+									<tbody>
+										    <tr>
+										      <td> Email</td>
+										      <td><span th:text="${user.email}"></span></td>
+										    </tr>
+										    
+										   <tr>
+										      <td> Role</td>
+										      <td><span th:text="${user.role}"></span></td>
+										    </tr>
+										    
+										   <tr>
+										      <td> Account Active</td>
+										      <td><span th:text="${user.enabled}"></span></td>
+										    </tr>
+										    
+										    <tr>
+										      <td> About</td>
+										      <td><span th:text="${user.about}"></span></td>
+										    </tr>
+										    
+									 </tbody>
+							</table>			
+						</div>
+						<div class="card-footer ">
+							<h3 class="text-italic" >
+								This is User Profile 
+								
+							</h3>
+						</div>
+						
+					</div>
+				
+			</div>	
+	</section>
+</body>
+</html>

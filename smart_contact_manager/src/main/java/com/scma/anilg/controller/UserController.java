@@ -216,9 +216,12 @@ public class UserController {
 		/** take contact details by using its ID */
 		Contact resultContact = this.userService.getContactById(cId);
 		
+		
 		/** compare both userID for avoiding url miss-leading purpose  */
 		if(currentUser.getId() == resultContact.getUser().getId()) {
-			this.userService.deleteContact(resultContact);
+			
+			/**Remove contact from given user List*/
+			this.userService.deleteContact(currentUser, resultContact);
 			
 			/**delete image from our folder also*/
 			// CODE HERE
@@ -307,4 +310,17 @@ public class UserController {
 		System.out.println("contact ID : "+contact.getcId());
 		return "redirect:/user/"+contact.getcId()+"/contact";
 	}
+	
+	/** user profile hander */
+	@GetMapping("/profile")
+	public String showUserProfile() {
+		
+		return "user/profile";
+	}
+	
+	
+	
+	
+	
+	
 }
